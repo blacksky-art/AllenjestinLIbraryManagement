@@ -4,7 +4,7 @@ import com.example.library.entity.Member;
 import com.example.library.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
+import org.hibernate.query.Query;
 public class MemberDAO {
 
     public void saveMember(Member member) {
@@ -18,4 +18,12 @@ public class MemberDAO {
             e.printStackTrace();
         }
     }
+
+    public Member getMemberByEmail(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Member> query = session.createQuery("FROM Member WHERE email = :email", Member.class);
+            query.setParameter("email", email);
+            return query.uniqueResult();
+        }
+        }
 }
